@@ -15,9 +15,11 @@ Not licensed for business use.
 
 ## Files
 
-- `index.html` — page shell, brand artwork, disclaimers
-- `app.js` — the application
+- `index.html` — the entire demo: application, brand artwork and disclaimers
 - `robots.txt` / `X-Robots-Tag` — keeps the demo out of search results
+
+React and its compiler load from a CDN at runtime, each with a backup source.
+If neither is reachable the page says so on screen rather than hanging.
 
 ## Deploying
 
