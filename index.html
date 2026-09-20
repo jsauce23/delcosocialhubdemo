@@ -183,12 +183,20 @@ p.secsub{color:var(--muted);font-size:13px;margin:3px 0 0}
 .tiprow{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .tlink{border:0;background:transparent;color:var(--muted);font-size:13px;padding:6px 0}
 @media (max-width:520px){ .tutlabel{display:none} }
+
+@media (max-width:640px){
+  .tip{padding:14px 16px;border-radius:12px}
+  .tip b{font-size:15px}
+  .tip p{font-size:13.5px;margin-bottom:12px}
+  .tiprow .btn{padding:8px 14px}
+}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="err" style="display:none;padding:28px;font-size:14px;color:#C2610A;white-space:pre-wrap"></div>
 <script>
+
 /* ==========================================================================
    DELCO SOCIAL HUB — DEMONSTRATION BUILD 7
    No frameworks, no external scripts. Everything runs from this file.
@@ -1254,7 +1262,7 @@ function lunaPanel() {
    A guided walkthrough for someone who has never seen the app. Each step
    highlights a real element on the real screen and explains it in plain words. */
 var TOUR = [
-  { view:"dashboard", sel:['[data-tour="nav"]','[data-tour="tut"]'],
+  { view:"dashboard", sel:['[data-tour="menu"]','[data-tour="nav"]','[data-tour="tut"]'],
     title:"Everything lives in this menu",
     body:"Eight sections, and that's the whole app. You'll never be more than one tap from any of them." },
   { view:"dashboard", sel:['[data-tour="stats"]'],
@@ -1321,7 +1329,13 @@ function placeTour() {
   var spot = document.getElementById("tourspot"), tip = document.getElementById("tourtip");
   if (!spot || !tip) return;
   var el = null;
-  for (var i = 0; i < s.sel.length && !el; i++) el = document.querySelector(s.sel[i]);
+  for (var i = 0; i < s.sel.length && !el; i++) {
+    var cand = document.querySelector(s.sel[i]);
+    if (!cand) continue;
+    var cr = cand.getBoundingClientRect();
+    // a hidden sidebar still exists in the page, so measure before choosing
+    if (cr.width > 4 && cr.height > 4 && cr.right > 0 && cr.left < window.innerWidth) el = cand;
+  }
   var vw = window.innerWidth, vh = window.innerHeight;
   var w = Math.min(330, vw - 24);
   tip.style.width = w + "px";
@@ -1332,13 +1346,29 @@ function placeTour() {
     return;
   }
   try { el.scrollIntoView({ block: "center", inline: "nearest" }); } catch (e) { el.scrollIntoView(); }
-  var r = el.getBoundingClientRect(), pad = 8;
+  var r = el.getBoundingClientRect();
+  var pad = (r.width < 70 && r.height < 70) ? 7 : 8;
+  var w2 = Math.min(vw - 8, r.width + pad * 2);
+  // never let the ring swallow the screen — cap it and keep the top in view
+  var h2 = Math.min(340, Math.round(vh * 0.62), r.height + pad * 2);
   spot.style.display = "block";
-  spot.style.left = Math.max(2, r.left - pad) + "px";
-  spot.style.top = Math.max(2, r.top - pad) + "px";
-  spot.style.width = Math.min(vw - 4, r.width + pad * 2) + "px";
-  spot.style.height = Math.min(vh - 4, r.height + pad * 2) + "px";
-  var th = tip.offsetHeight || 170;
+  spot.style.left = Math.max(3, r.left - pad) + "px";
+  spot.style.top = Math.max(3, r.top - pad) + "px";
+  spot.style.width = w2 + "px";
+  spot.style.height = h2 + "px";
+  // a small square target reads better as a circle
+  var round = (Math.abs(w2 - h2) < 14 && w2 < 74);
+  spot.style.borderRadius = round ? "50%" : "12px";
+  var th = tip.offsetHeight || 180;
+  if (vw < 640) {
+    // phones: one column, callout parked at the bottom unless the ring is there
+    var ringBottom = Math.max(3, r.top - pad) + h2;
+    var below = ringBottom + 14;
+    tip.style.left = "12px";
+    tip.style.width = (vw - 24) + "px";
+    tip.style.top = Math.round(below + th < vh - 12 ? below : Math.max(12, vh - th - 14)) + "px";
+    return;
+  }
   var top = r.bottom + 14;
   if (top + th > vh - 12) top = r.top - th - 14;
   if (top < 12) top = Math.max(12, vh - th - 12);
@@ -1401,8 +1431,8 @@ function render() {
       '<div class="main">' +
       '<div class="demobar"><span class="tag">DEMO</span>' +
       '<span>Sample data only. Not connected to DELCO\u2019s Instagram, Facebook or TikTok — nothing here ' +
-      'posts anywhere.</span><span class="v">build 8</span></div>' +
-      '<div class="top"><button class="menubtn" data-menu="1">' + ic("menu", 16) + '</button>' +
+      'posts anywhere.</span><span class="v">build 9</span></div>' +
+      '<div class="top"><button class="menubtn" data-menu="1" data-tour="menu">' + ic("menu", 16) + '</button>' +
       '<div class="searchbox">' + ic("search", 14) + '<span>Search content and media</span></div>' +
       '<div style="flex:1"></div>' +
       '<button class="btn dark sm" data-luna="1" data-tour="luna">' + ic("sparkles", 13) + ' Ask LUNA</button>' +
