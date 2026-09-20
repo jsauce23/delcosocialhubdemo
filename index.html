@@ -201,7 +201,7 @@ p.secsub{color:var(--muted);font-size:13px;margin:3px 0 0}
    DELCO SOCIAL HUB — DEMONSTRATION BUILD 7
    No frameworks, no external scripts. Everything runs from this file.
    All data below is fictional. Nothing is connected to any real account.
-   Prepared by Around SA Marketing for DELCO Heating & Cooling.
+   Prepared by Social Solutions TX for DELCO Heating & Cooling.
    ========================================================================== */
 (function () {
 "use strict";
@@ -1101,7 +1101,7 @@ S.settings = function () {
     ["Media storage","Photos and video from the field","images"]];
   var team = [["Brian Guthmiller","Owner · Approves and appears on camera"],
     ["Christopher Waltein","Admin · Final approval"],["Field Team","Uploads photos and video from jobs"],
-    ["Around SA Marketing","Plans, produces and schedules"]];
+    ["Social Solutions TX","Plans, produces and schedules"]];
   var i;
   var h = '<h1 class="page">Settings</h1><p class="sub">Accounts, people and reminders.</p>' +
     '<div class="card" style="margin-top:18px"><div style="padding:16px 18px;border-bottom:1px solid var(--line)">' +
@@ -1417,7 +1417,7 @@ function demoNotice() {
     '<div class="mb"><p style="margin:0 0 12px;font-size:14px;line-height:1.6">You\u2019re looking at a working ' +
     'preview of DELCO Social Hub. Click around freely — every screen is live.</p><ul style="margin:0;padding-left:18px">';
   for (var i = 0; i < pts.length; i++) h += '<li>' + pts[i] + '</li>';
-  h += '</ul><p class="small muted" style="margin:14px 0 0;line-height:1.6">Prepared by Around SA Marketing ' +
+  h += '</ul><p class="small muted" style="margin:14px 0 0;line-height:1.6">Prepared by Social Solutions TX ' +
     'for evaluation. Not licensed for business use.</p></div>' +
     '<div class="mf"><button class="btn primary full" data-dismiss="1">Got it — show me the demo</button></div></div></div>';
   return h;
@@ -1431,7 +1431,7 @@ function render() {
       '<div class="main">' +
       '<div class="demobar"><span class="tag">DEMO</span>' +
       '<span>Sample data only. Not connected to DELCO\u2019s Instagram, Facebook or TikTok — nothing here ' +
-      'posts anywhere.</span><span class="v">build 9</span></div>' +
+      'posts anywhere.</span><span class="v">build 10</span></div>' +
       '<div class="top"><button class="menubtn" data-menu="1" data-tour="menu">' + ic("menu", 16) + '</button>' +
       '<div class="searchbox">' + ic("search", 14) + '<span>Search content and media</span></div>' +
       '<div style="flex:1"></div>' +
@@ -1440,7 +1440,7 @@ function render() {
       ic("bulb", 13) + '<span class="tutlabel"> ' + (state.tour ? "Exit tutorial" : "Tutorial") + '</span></button></div>' +
       '<div class="content"><div class="wrap">' + screen +
       '<div class="footnote">Demonstration build · All content, numbers and activity shown are fictional examples.<br>' +
-      'Prepared by Around SA Marketing for DELCO Heating &amp; Cooling. Not licensed for business use.</div>' +
+      'Prepared by Social Solutions TX for DELCO Heating &amp; Cooling. Not licensed for business use.</div>' +
       '</div></div></div></div>';
     if (state.panel === "content") { var c = byId(state.panelId); if (c) h += contentPanel(c); }
     if (state.panel === "request") { var r = reqById(state.panelId); if (r) h += requestPanel(r); }

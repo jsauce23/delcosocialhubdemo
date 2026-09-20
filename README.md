@@ -1,6 +1,6 @@
 # DELCO Social Hub — demo
 
-Clickable demonstration of DELCO Social Hub, prepared by Around SA Marketing
+Clickable demonstration of DELCO Social Hub, prepared by Social Solutions TX
 for DELCO Heating & Cooling.
 
 **This is a demo.** Every post, photo, request and number is a fictional
