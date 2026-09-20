@@ -44,6 +44,21 @@
    =========================================================================== */
 const { useState, useMemo, useEffect } = React;
 
+/* Safety net: if any element type ever resolves to undefined, draw nothing in
+   its place and note it in the console instead of blanking the whole app. */
+(function () {
+  if (React.__guarded) return;
+  React.__guarded = true;
+  var create = React.createElement;
+  React.createElement = function (type) {
+    if (type === undefined || type === null) {
+      try { console.warn("Skipped an undefined component:", new Error().stack); } catch (e) {}
+      arguments[0] = "span";
+    }
+    return create.apply(React, arguments);
+  };
+})();
+
 /* --- icons -------------------------------------------------------------- */
 /* Rendered from the lucide icon set loaded on the page. Falls back to a dot
    if a name is ever missing, so a typo can never blank the interface. */
@@ -60,8 +75,9 @@ function makeIcon(name) {
     var kids;
     try {
       kids = (Array.isArray(node) ? node : []).map(function (c, i) {
-        return React.createElement(c[0], Object.assign({ key: i }, c[1] || {}));
-      });
+        var tag = (c && typeof c[0] === "string") ? c[0] : "path";
+        return React.createElement(tag, Object.assign({ key: i }, (c && c[1]) || {}));
+      }).filter(Boolean);
     } catch (e) { kids = []; }
     if (!kids.length) kids = [React.createElement("circle", { key: 0, cx: 12, cy: 12, r: 4 })];
     return React.createElement("svg", {
