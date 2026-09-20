@@ -7,14 +7,15 @@ for DELCO Heating & Cooling.
 example. It is not connected to DELCO's Instagram, Facebook or TikTok. Nothing
 inside it posts, sends or saves anything. Not licensed for business use.
 
+## Files
+
+- `index.html` — the entire app. No frameworks, no build step, no external scripts.
+- `delco-logo.png`, `delco-dog.png` — brand artwork. The app still runs without them.
+- `render.yaml`, `robots.txt` — deploy settings, keeps the demo out of search results.
+
 ## Deploy on Render
 
-Dashboard → **New → Static Site** → connect this repo, then:
+New → **Static Site** → connect this repo:
 
 - **Build Command:** leave empty
 - **Publish Directory:** `.`
-
-`render.yaml` sets the same thing, so a Blueprint deploy works too.
-
-`index.html` is the whole app — no build step, no other files needed. It must
-be served over http(s), not opened as a local file.

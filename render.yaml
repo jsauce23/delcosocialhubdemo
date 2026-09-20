@@ -5,7 +5,6 @@ services:
     buildCommand: ""
     staticPublishPath: .
     headers:
-      # keep an unpaid demo out of search results
       - path: /*
         name: X-Robots-Tag
         value: noindex, nofollow
