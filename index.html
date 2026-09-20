@@ -169,6 +169,20 @@ p.secsub{color:var(--muted);font-size:13px;margin:3px 0 0}
   .menubtn{display:inline-flex}
   .backdrop{position:fixed;inset:0;background:rgba(11,27,51,.45);z-index:45}
 }
+
+/* tutorial */
+.tour{position:fixed;inset:0;z-index:70;pointer-events:none}
+.spot{position:fixed;border:3px solid var(--gold);border-radius:12px;
+  box-shadow:0 0 0 9999px rgba(11,27,51,.66);transition:left .18s,top .18s,width .18s,height .18s}
+.tip{position:fixed;background:#fff;border-radius:14px;padding:16px 18px;pointer-events:auto;
+  box-shadow:0 14px 40px rgba(11,27,51,.35);z-index:71}
+.tip .tipnum{font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--goldink);
+  text-transform:uppercase;margin-bottom:6px}
+.tip b{display:block;font-size:16px;line-height:1.3;margin-bottom:6px}
+.tip p{font-size:14px;line-height:1.55;color:var(--body);margin:0 0 14px}
+.tiprow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tlink{border:0;background:transparent;color:var(--muted);font-size:13px;padding:6px 0}
+@media (max-width:520px){ .tutlabel{display:none} }
 </style>
 </head>
 <body>
@@ -543,7 +557,7 @@ S.dashboard = function () {
     ["Total reach","94.2K","+38% vs last 30 days",""],["Engagement","6.4%","+1.8 pts",T.good]];
   var h = '<h1 class="page">Good afternoon, Brian</h1>' +
     '<p class="sub">Here\u2019s what\u2019s happening with DELCO\u2019s content.</p>' +
-    '<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:20px">';
+    '<div class="grid" data-tour="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:20px">';
   for (var i = 0; i < stats.length; i++) {
     h += '<div class="card stat"><div class="l">' + stats[i][0] + '</div><div class="v"' +
       (stats[i][3] ? ' style="color:' + stats[i][3] + '"' : '') + '>' + stats[i][1] + '</div>' +
@@ -554,7 +568,7 @@ S.dashboard = function () {
   var acts = [["Record","3 Signs Your AC Needs Service","Brian","September 8","needed",1,"c1"],
               ["Upload","Recent Installation Photos","Field Team","September 9","production",2,"r1"],
               ["Approve","Fall Maintenance Campaign","Chris","September 10","approval",4,"c2"]];
-  h += '<div class="card" style="margin-top:22px;border-color:#F0DCB4">' +
+  h += '<div class="card" data-tour="action" style="margin-top:22px;border-color:#F0DCB4">' +
     '<div class="row" style="padding:14px 18px;border-bottom:1px solid var(--line);justify-content:space-between">' +
     '<span class="row" style="gap:8px">' + ic("alert", 16, T.warm) +
     '<b style="font-size:15px">Action required</b></span><span class="small muted">3 items</span></div>';
@@ -570,7 +584,7 @@ S.dashboard = function () {
       '<span class="row" style="gap:4px">' + ic("user", 12) + a[2] + '</span>' +
       '<span class="row" style="gap:4px">' + ic("clock", 12) + 'Due ' + a[3] + '</span></div></div>' +
       statusPill(a[4]) + '</div>' +
-      '<div style="margin-top:12px">' + track(a[5]) + '</div></div>';
+      '<div style="margin-top:12px"' + (i ? '' : ' data-tour="track"') + '>' + track(a[5]) + '</div></div>';
   }
   h += '</div>';
 
@@ -590,7 +604,7 @@ S.dashboard = function () {
   }
   h += '</div></div>';
 
-  h += '<div>' + sechead("Quick actions", "") + '<div class="card pad" style="display:grid;gap:8px">' +
+  h += '<div>' + sechead("Quick actions", "") + '<div class="card pad" data-tour="quick" style="display:grid;gap:8px">' +
     '<button class="btn primary full" data-nav="ai">' + ic("plus", 14) + ' Create content</button>' +
     '<button class="btn full" data-nav="requests">' + ic("upload", 14) + ' Upload media</button>' +
     '<button class="btn full" data-nav="planner">' + ic("bulb", 14) + ' Add content idea</button>' +
@@ -611,7 +625,7 @@ S.planner = function () {
   var view = state.plannerView;
   var h = '<div class="sechead"><div><h1 class="page">Content planner</h1>' +
     '<p class="sub">September 2026 — 12 items planned, 3 still need content.</p></div>' +
-    '<div class="row" style="gap:8px">' +
+    '<div class="row" data-tour="pviews" style="gap:8px">' +
     ['Month','Week','List'].map(function (v) {
       return '<button class="chip' + (view === v ? ' on' : '') + '" data-pview="' + v + '">' + v + '</button>';
     }).join("") +
@@ -634,7 +648,7 @@ S.planner = function () {
   }
 
   var days = view === "Week" ? [8,9,10,11,12,13,14] : null;
-  h += '<div class="card scrollx"><div class="cal">';
+  h += '<div class="card scrollx" data-tour="calendar"><div class="cal">';
   var names = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   for (i = 0; i < 7; i++) h += '<div class="hd">' + names[i] + '</div>';
   var cells = [];
@@ -674,13 +688,13 @@ S.ai = function () {
     h += '<button class="chip' + (state.aiType === types[i][0] ? ' on' : '') + '" data-aitype="' +
       types[i][0] + '"><span class="row" style="gap:6px">' + ic(types[i][2], 13) + types[i][1] + '</span></button>';
   }
-  h += '</div><textarea id="aiprompt" rows="3" placeholder="What do you want to create?" ' +
+  h += '</div><textarea id="aiprompt" data-tour="prompt" rows="3" placeholder="What do you want to create?" ' +
     'style="width:100%;border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;' +
     'font-size:15px;background:#FBFCFD;resize:none">' + esc(state.aiPrompt) + '</textarea>' +
     '<div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:12px">' +
-    '<button class="pill ' + (state.brandLock ? "good" : "") + '" data-lock="1" style="border:0;padding:6px 11px">' +
+    '<button class="pill ' + (state.brandLock ? "good" : "") + '" data-lock="1" data-tour="lock" style="border:0;padding:6px 11px">' +
     ic("lock", 12) + ' DELCO Brand Lock: ' + (state.brandLock ? "ON" : "OFF") + '</button>' +
-    '<button class="btn primary" data-generate="1">' + ic("wand", 14) + ' Generate</button></div>' +
+    '<button class="btn primary" data-generate="1" data-tour="generate">' + ic("wand", 14) + ' Generate</button></div>' +
     (state.brandLock ? '<p class="small muted" style="margin:12px 0 0">Using DELCO\u2019s logo, colours, fonts, ' +
       'voice and approved photos from Brand Hub.</p>' : '') + '</div>';
 
@@ -835,7 +849,8 @@ S.requests = function () {
     var key = REQCOLS[i][0], label = REQCOLS[i][1], wait = key === "waiting";
     var items = REQUESTS.filter(function (r) { return r.col === key; });
     if (narrow && !items.length) continue;
-    h += narrow ? '<div style="margin-bottom:22px">' : '<div class="col">';
+    h += (narrow ? '<div style="margin-bottom:22px"' : '<div class="col"') +
+         (wait ? ' data-tour="waiting"' : '') + '>';
     h += '<div class="row" style="gap:8px;margin-bottom:10px">' +
       '<b style="font-size:14px' + (wait ? ';color:' + T.warm : '') + '">' + label + '</b>' +
       '<span class="pill ' + (wait ? "warm" : "") + '" style="padding:1px 8px">' + items.length + '</span></div>';
@@ -858,7 +873,7 @@ S.requests = function () {
   }
   h += '</div>';
 
-  h += '<div class="card pad" style="margin-top:22px">' +
+  h += '<div class="card pad" data-tour="phone" style="margin-top:22px">' +
     '<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-items:center;gap:22px">' +
     '<div><h2 class="sec">Phone upload for the field team</h2>' +
     '<p style="color:var(--body);font-size:14px;line-height:1.6;margin:10px 0 0">Technicians get a text with a link. ' +
@@ -890,7 +905,7 @@ S.library = function () {
     h += '<button class="chip' + (state.libCat === LIBCATS[i] ? ' on' : '') + '" data-libcat="' +
       esc(LIBCATS[i]) + '">' + LIBCATS[i] + '</button>';
   }
-  h += '</div><div class="row" style="flex-wrap:wrap;gap:6px;margin-top:12px">';
+  h += '</div><div class="row" data-tour="tags" style="flex-wrap:wrap;gap:6px;margin-top:12px">';
   for (i = 0; i < LIBTAGS.length; i++) {
     h += '<button class="chip round' + (state.libTags.indexOf(LIBTAGS[i]) >= 0 ? ' on' : '') +
       '" data-libtag="' + esc(LIBTAGS[i]) + '">' + LIBTAGS[i] + '</button>';
@@ -971,7 +986,7 @@ S.analytics = function () {
   var moves = ["Film 2 more educational Brian videos","Increase installation content",
     "Reduce promotional graphics","Post 4 times next week"];
   h += '<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:24px">' +
-    '<div class="card pad"><div class="row" style="gap:8px;margin-bottom:12px">' + ic("sparkles", 15, T.warm) +
+    '<div class="card pad" data-tour="working"><div class="row" style="gap:8px;margin-bottom:12px">' + ic("sparkles", 15, T.warm) +
     '<h2 class="sec">What\u2019s working</h2></div><ul style="margin:0;padding-left:18px">';
   for (i = 0; i < ins.length; i++) {
     h += '<li style="font-size:14px;color:var(--body);line-height:1.6;margin-bottom:8px">' + esc(ins[i]) + '</li>';
@@ -1007,7 +1022,7 @@ S.brand = function () {
     '<span class="pill good">Brand Lock on by default</span></div>' +
     '<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:16px">';
 
-  h += '<div class="card pad">' + sechead("Logo", "Primary and reversed versions") +
+  h += '<div class="card pad" data-tour="brandlogo">' + sechead("Logo", "Primary and reversed versions") +
     '<div style="border:1px solid var(--line);background:#FAFBFC;border-radius:10px;padding:22px;text-align:center">' +
     '<img src="' + LOGO + '" alt="DELCO Heating and Cooling" style="height:92px;width:auto">' +
     '<div class="small muted" style="margin-top:10px">delco-logo.png · loaded</div></div></div>';
@@ -1234,12 +1249,109 @@ function lunaPanel() {
   return h;
 }
 
+
+/* --- tutorial mode -------------------------------------------------------
+   A guided walkthrough for someone who has never seen the app. Each step
+   highlights a real element on the real screen and explains it in plain words. */
+var TOUR = [
+  { view:"dashboard", sel:['[data-tour="nav"]','[data-tour="tut"]'],
+    title:"Everything lives in this menu",
+    body:"Eight sections, and that's the whole app. You'll never be more than one tap from any of them." },
+  { view:"dashboard", sel:['[data-tour="stats"]'],
+    title:"Your month at a glance",
+    body:"Posts published, what's scheduled, what's waiting on approval, and how it's all performing." },
+  { view:"dashboard", sel:['[data-tour="action"]'],
+    title:"What needs you today",
+    body:"The short list of jobs that are actually waiting on someone. Each one shows a name and a due date — so nothing sits unclaimed." },
+  { view:"dashboard", sel:['[data-tour="track"]'],
+    title:"Where each job stands",
+    body:"Every piece of content walks the same six steps: requested, reminded, uploaded, drafted, approved, published. The gold dot is where it is right now." },
+  { view:"dashboard", sel:['[data-tour="quick"]'],
+    title:"Start something in one tap",
+    body:"Create a post, upload photos from a job, jot down an idea, or schedule something for later." },
+  { view:"planner", sel:['[data-tour="calendar"]','[data-tour="pviews"]'],
+    title:"Everything that's going out",
+    body:"Your whole month in one place. Tap any item to read its script, caption and history. Switch between month, week and a simple list." },
+  { view:"ai", sel:['[data-tour="prompt"]'],
+    title:"Just describe what you want",
+    body:"Type it the way you'd say it out loud — \"a Christmas post\" or \"five Reel ideas\". No design or writing skill needed." },
+  { view:"ai", sel:['[data-tour="lock"]'],
+    title:"Brand Lock keeps it looking like DELCO",
+    body:"With this on, anything created uses DELCO's real logo, colours, mascot and tone of voice automatically." },
+  { view:"ai", sel:['[data-tour="generate"]'],
+    title:"Then press Generate",
+    body:"You get finished options in seconds — edit them, save them to the library, put them on the calendar, or send them for approval." },
+  { view:"requests", sel:['[data-tour="waiting"]'],
+    title:"Who we're waiting on",
+    body:"This is the shared to-do list between DELCO and the marketing team. Anything sitting here is holding up a post." },
+  { view:"requests", sel:['[data-tour="phone"]'],
+    title:"Technicians upload from the job",
+    body:"They get a text with a link. No app, no login — they tap, upload, and it lands here straight away." },
+  { view:"library", sel:['[data-tour="tags"]'],
+    title:"Every photo and video, findable",
+    body:"Filter by job type, season or subject. Nothing gets lost in somebody's camera roll again." },
+  { view:"analytics", sel:['[data-tour="working"]'],
+    title:"What's actually working",
+    body:"Plain-English takeaways from the numbers — which content earns attention, and what to do more of next week." },
+  { view:"brand", sel:['[data-tour="brandlogo"]'],
+    title:"Teach it your brand once",
+    body:"Logo, colours, voice, the dog, your service area and current offers. Set it here and every future post follows it." },
+  { view:"dashboard", sel:['[data-tour="luna"]'],
+    title:"And you can just ask",
+    body:"LUNA knows the calendar, the uploads and the numbers. Ask it what's outstanding or what to post this week." }
+];
+
+function tourOverlay() {
+  if (!state.tour) return "";
+  var s = TOUR[state.tourStep], last = state.tourStep === TOUR.length - 1;
+  return '<div class="tour"><div class="spot" id="tourspot"></div>' +
+    '<div class="tip" id="tourtip">' +
+    '<div class="tipnum">Step ' + (state.tourStep + 1) + ' of ' + TOUR.length + '</div>' +
+    '<b>' + s.title + '</b><p>' + s.body + '</p>' +
+    '<div class="tiprow"><button class="tlink" data-tourend="1">Exit tutorial</button>' +
+    '<span class="row" style="gap:8px">' +
+    (state.tourStep ? '<button class="btn sm" data-tourprev="1">Back</button>' : '') +
+    '<button class="btn sm primary" data-tournext="1">' + (last ? "Finish" : "Next") + '</button>' +
+    '</span></div></div></div>';
+}
+
+function placeTour() {
+  if (!state.tour) return;
+  var s = TOUR[state.tourStep];
+  var spot = document.getElementById("tourspot"), tip = document.getElementById("tourtip");
+  if (!spot || !tip) return;
+  var el = null;
+  for (var i = 0; i < s.sel.length && !el; i++) el = document.querySelector(s.sel[i]);
+  var vw = window.innerWidth, vh = window.innerHeight;
+  var w = Math.min(330, vw - 24);
+  tip.style.width = w + "px";
+  if (!el) {
+    spot.style.display = "none";
+    tip.style.left = Math.round((vw - w) / 2) + "px";
+    tip.style.top = Math.round(vh / 2 - 90) + "px";
+    return;
+  }
+  try { el.scrollIntoView({ block: "center", inline: "nearest" }); } catch (e) { el.scrollIntoView(); }
+  var r = el.getBoundingClientRect(), pad = 8;
+  spot.style.display = "block";
+  spot.style.left = Math.max(2, r.left - pad) + "px";
+  spot.style.top = Math.max(2, r.top - pad) + "px";
+  spot.style.width = Math.min(vw - 4, r.width + pad * 2) + "px";
+  spot.style.height = Math.min(vh - 4, r.height + pad * 2) + "px";
+  var th = tip.offsetHeight || 170;
+  var top = r.bottom + 14;
+  if (top + th > vh - 12) top = r.top - th - 14;
+  if (top < 12) top = Math.max(12, vh - th - 12);
+  tip.style.top = Math.round(top) + "px";
+  tip.style.left = Math.round(Math.min(Math.max(12, r.left), vw - w - 12)) + "px";
+}
+
 /* --- shell, state and events --------------------------------------------- */
 var state = {
   view: "dashboard", panel: null, panelId: null, tab: "brief", menu: false,
   notice: true, plannerView: (window.innerWidth < 768 ? "List" : "Month"),
   aiType: "graphic", aiPrompt: "", aiState: "idle", aiResult: null, brandLock: true,
-  libCat: "All", libTags: [], range: "30 Days",
+  libCat: "All", libTags: [], range: "30 Days", tour: false, tourStep: 0,
   luna: [{ r: "ai", x: "Morning. I've got DELCO's calendar, brand, uploads and analytics loaded. What do you need?" }]
 };
 
@@ -1251,7 +1363,7 @@ var NAV = [["dashboard","Dashboard","dashboard",0],["planner","Content Planner",
 function sidebar() {
   var h = '<aside class="side' + (state.menu ? ' open' : '') + '">' +
     '<div class="brand"><img src="' + LOGO + '" alt="DELCO Heating and Cooling" ' +
-    'onerror="this.style.display=\'none\'"><div><b>Social Hub</b><span>DEMO VERSION</span></div></div><nav class="nav">';
+    'onerror="this.style.display=\'none\'"><div><b>Social Hub</b><span>DEMO VERSION</span></div></div><nav class="nav" data-tour="nav">';
   for (var i = 0; i < NAV.length; i++) {
     h += '<button data-nav="' + NAV[i][0] + '" class="' + (state.view === NAV[i][0] ? "on" : "") + '">' +
       ic(NAV[i][2], 16) + '<span style="flex:1">' + NAV[i][1] + '</span>' +
@@ -1268,7 +1380,8 @@ function demoNotice() {
     "Nothing is connected to DELCO\u2019s real social accounts.",
     "Nothing you do here posts, sends or changes anything.",
     "The AI studio simulates its results — it isn\u2019t generating live.",
-    "Saved changes disappear when you refresh the page."];
+    "Saved changes disappear when you refresh the page.",
+    "New: tap <b>Tutorial</b> at the top for a guided walkthrough."];
   var h = '<div class="modal"><div class="box"><div class="mh"><span class="demobar" style="background:none;' +
     'border:0;padding:0"><span class="tag">DEMO</span></span><h3>This is a demonstration</h3></div>' +
     '<div class="mb"><p style="margin:0 0 12px;font-size:14px;line-height:1.6">You\u2019re looking at a working ' +
@@ -1288,11 +1401,13 @@ function render() {
       '<div class="main">' +
       '<div class="demobar"><span class="tag">DEMO</span>' +
       '<span>Sample data only. Not connected to DELCO\u2019s Instagram, Facebook or TikTok — nothing here ' +
-      'posts anywhere.</span><span class="v">build 7</span></div>' +
+      'posts anywhere.</span><span class="v">build 8</span></div>' +
       '<div class="top"><button class="menubtn" data-menu="1">' + ic("menu", 16) + '</button>' +
       '<div class="searchbox">' + ic("search", 14) + '<span>Search content and media</span></div>' +
       '<div style="flex:1"></div>' +
-      '<button class="btn dark sm" data-luna="1">' + ic("sparkles", 13) + ' Ask LUNA</button></div>' +
+      '<button class="btn dark sm" data-luna="1" data-tour="luna">' + ic("sparkles", 13) + ' Ask LUNA</button>' +
+      '<button class="btn sm' + (state.tour ? " primary" : "") + '" data-tourtoggle="1" data-tour="tut">' +
+      ic("bulb", 13) + '<span class="tutlabel"> ' + (state.tour ? "Exit tutorial" : "Tutorial") + '</span></button></div>' +
       '<div class="content"><div class="wrap">' + screen +
       '<div class="footnote">Demonstration build · All content, numbers and activity shown are fictional examples.<br>' +
       'Prepared by Around SA Marketing for DELCO Heating &amp; Cooling. Not licensed for business use.</div>' +
@@ -1301,7 +1416,9 @@ function render() {
     if (state.panel === "request") { var r = reqById(state.panelId); if (r) h += requestPanel(r); }
     if (state.panel === "luna") h += lunaPanel();
     if (state.notice) h += demoNotice();
+    h += tourOverlay();
     document.getElementById("app").innerHTML = h;
+    if (state.tour) { placeTour(); setTimeout(placeTour, 60); }
   } catch (e) {
     var box = document.getElementById("err");
     box.style.display = "block";
@@ -1313,7 +1430,8 @@ function closePanel() { state.panel = null; state.panelId = null; state.tab = "b
 
 document.addEventListener("click", function (ev) {
   var el = ev.target, hit = null, keys = ["nav","open","req","act","luna","close","closemenu","menu","tab",
-    "pview","aitype","example","generate","lock","libcat","libtag","libclear","range","dismiss","ask","send","stop"];
+    "pview","aitype","example","generate","lock","libcat","libtag","libclear","range","dismiss","ask","send","stop",
+    "tourtoggle","tournext","tourprev","tourend"];
   while (el && el !== document.body) {
     for (var i = 0; i < keys.length; i++) {
       if (el.hasAttribute && el.hasAttribute("data-" + keys[i])) { hit = [keys[i], el.getAttribute("data-" + keys[i])]; break; }
@@ -1357,6 +1475,19 @@ document.addEventListener("click", function (ev) {
   else if (k === "libclear") { state.libCat = "All"; state.libTags = []; }
   else if (k === "range") state.range = v;
   else if (k === "dismiss") state.notice = false;
+  else if (k === "tourtoggle") {
+    state.tour = !state.tour; state.tourStep = 0; closePanel();
+    if (state.tour) state.view = TOUR[0].view;
+  }
+  else if (k === "tourend") state.tour = false;
+  else if (k === "tourprev") {
+    state.tourStep = Math.max(0, state.tourStep - 1);
+    state.view = TOUR[state.tourStep].view; closePanel();
+  }
+  else if (k === "tournext") {
+    if (state.tourStep >= TOUR.length - 1) { state.tour = false; state.tourStep = 0; }
+    else { state.tourStep++; state.view = TOUR[state.tourStep].view; closePanel(); }
+  }
   else if (k === "ask") { state.luna.push({ r: "me", x: v }); state.luna.push({ r: "ai", x: lunaReply(v) }); }
   else if (k === "send") {
     var box = document.getElementById("lunainput");
@@ -1380,8 +1511,9 @@ document.addEventListener("keydown", function (e) {
 });
 
 window.addEventListener("resize", function () {
-  if (state.view === "requests") render();
+  if (state.view === "requests") render(); else placeTour();
 });
+window.addEventListener("scroll", function () { placeTour(); }, true);
 
 render();
 })();
