@@ -7,11 +7,14 @@ for DELCO Heating & Cooling.
 example. It is not connected to DELCO's Instagram, Facebook or TikTok. Nothing
 inside it posts, sends or saves anything. Not licensed for business use.
 
-## Deploy
+## Deploy on Render
 
-**GitHub Pages** — Settings → Pages → Deploy from a branch → `main` / `/ (root)`
+Dashboard → **New → Static Site** → connect this repo, then:
 
-**Netlify** — Import this repo. No build command; publish directory `.`
+- **Build Command:** leave empty
+- **Publish Directory:** `.`
 
-`index.html` is the whole thing. Must be served over http(s), not opened as a
-local file.
+`render.yaml` sets the same thing, so a Blueprint deploy works too.
+
+`index.html` is the whole app — no build step, no other files needed. It must
+be served over http(s), not opened as a local file.

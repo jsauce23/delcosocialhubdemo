@@ -1,0 +1,14 @@
+services:
+  - type: web
+    runtime: static
+    name: delco-social-hub-demo
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      # keep an unpaid demo out of search results
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex, nofollow
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
